@@ -1,0 +1,24 @@
+{
+  "6fe6d333-098e-40d1-b12d-a62b609c8122": {
+    "machine_id": "6fe6d333-098e-40d1-b12d-a62b609c8122",
+    "timestamp": "2025-08-10T10:24:11.299993",
+    "os": "Windows",
+    "disk_encryption": {
+      "encrypted": null,
+      "details": "Administrator privileges required to check BitLocker status."
+    },
+    "os_update": {
+      "up_to_date": null,
+      "details": "Check with Windows Update API for production"
+    },
+    "antivirus": {
+      "antivirus_present": true,
+      "status": "AMServiceEnabled AntivirusEnabled RealTimeProtectionEnabled Antiv\n                                                            irusS\n                                                            ignat\n                                                            ureLa\n                                                            stUpd\n                                                            ated \n---------------- ---------------- ------------------------- -----\n            True             True                      True 10..."
+    },
+    "sleep_settings": {
+      "sleep_timeout_minutes": 0,
+      "compliant": true,
+      "details": "Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced)\n  GUID Alias: SCHEME_BALANCED\n  Subgroup GUID: 238c9fa8-0aad-41ed-83f4-97be242c8f20  (Sleep)\n    GUID Alias: SUB_SLEEP\n    Power Setting GUID: 29f6c1db-86da-48c5-9fdb-f2b67b1f44da  (Sleep after)\n      GUID Alias: STANDBYIDLE\n      Minimum Possible Setting: 0x00000000\n      Maximum Possible Setting: 0xffffffff\n      Possible Settings increment: 0x00000001\n      Possible Settings units: Seconds\n    Current AC Power Setting Index: 0x000000b4\n    Current DC Power Setting Index: 0x000000b4"
+    }
+  }
+}

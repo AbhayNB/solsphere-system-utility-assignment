@@ -1,0 +1,11 @@
+# Backend Dependencies
+flask>=2.0.0
+flask-cors>=3.0.0
+requests>=2.25.0
+
+# For SQLite backend (optional)
+# No additional dependencies needed - sqlite3 is built into Python
+
+# Development dependencies (optional)
+# pytest>=6.0.0
+# pytest-flask>=1.0.0

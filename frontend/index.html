@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Health Dashboard - SolSphere</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-shield-alt"></i> System Health Dashboard</h1>
+                <div class="header-actions">
+                    <button id="refreshBtn" class="btn btn-secondary">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle">
+                            <i class="fas fa-download"></i> Export
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="#" id="exportJson"><i class="fas fa-file-code"></i> Export JSON</a>
+                            <a href="#" id="exportCsv"><i class="fas fa-file-csv"></i> Export CSV</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats Overview -->
+        <section class="stats-overview">
+            <div class="stat-card">
+                <div class="stat-icon bg-blue">
+                    <i class="fas fa-desktop"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="totalMachines">0</h3>
+                    <p>Total Machines</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-red">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="issueCount">0</h3>
+                    <p>Issues Found</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-green">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="healthyCount">0</h3>
+                    <p>Healthy Systems</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon bg-orange">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="lastUpdate">--</h3>
+                    <p>Last Update</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filters -->
+        <section class="filters">
+            <div class="filter-group">
+                <label for="osFilter">Operating System:</label>
+                <select id="osFilter">
+                    <option value="">All OS</option>
+                    <option value="Windows">Windows</option>
+                    <option value="Linux">Linux</option>
+                    <option value="Darwin">macOS</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="issueFilter">Issues:</label>
+                <select id="issueFilter">
+                    <option value="">All Issues</option>
+                    <option value="unencrypted_disk">Unencrypted Disk</option>
+                    <option value="outdated_os">Outdated OS</option>
+                    <option value="no_antivirus">No Antivirus</option>
+                    <option value="sleep_noncompliant">Sleep Non-compliant</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="searchFilter">Search:</label>
+                <input type="text" id="searchFilter" placeholder="Search by machine ID...">
+            </div>
+            <button id="clearFilters" class="btn btn-secondary">
+                <i class="fas fa-times"></i> Clear Filters
+            </button>
+        </section>
+
+        <!-- Loading Indicator -->
+        <div id="loadingIndicator" class="loading">
+            <i class="fas fa-spinner fa-spin"></i> Loading data...
+        </div>
+
+        <!-- Error Message -->
+        <div id="errorMessage" class="error-message" style="display: none;">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="errorText"></span>
+            <button id="retryBtn" class="btn btn-secondary btn-sm">Retry</button>
+        </div>
+
+        <!-- Machines Table -->
+        <section class="machines-section">
+            <div class="section-header">
+                <h2>Reporting Machines</h2>
+                <div class="table-controls">
+                    <span id="machineCount">0 machines</span>
+                    <button id="toggleView" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-th"></i> Card View
+                    </button>
+                </div>
+            </div>
+
+            <!-- Table View -->
+            <div id="tableView" class="table-container">
+                <table class="machines-table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <button class="sort-btn" data-sort="machine_id">
+                                    Machine ID <i class="fas fa-sort"></i>
+                                </button>
+                            </th>
+                            <th>
+                                <button class="sort-btn" data-sort="os">
+                                    OS <i class="fas fa-sort"></i>
+                                </button>
+                            </th>
+                            <th>Status</th>
+                            <th>Disk Encryption</th>
+                            <th>OS Updates</th>
+                            <th>Antivirus</th>
+                            <th>Sleep Settings</th>
+                            <th>
+                                <button class="sort-btn" data-sort="timestamp">
+                                    Last Check-in <i class="fas fa-sort"></i>
+                                </button>
+                            </th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="machinesTableBody">
+                        <!-- Dynamic content will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Card View -->
+            <div id="cardView" class="card-view" style="display: none;">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+        </section>
+
+        <!-- Machine Details Modal -->
+        <div id="machineModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Machine Details</h2>
+                    <button class="modal-close" id="closeModal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <!-- Dynamic content will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
