@@ -57,46 +57,276 @@ Modern, responsive web interface:
 ### Prerequisites
 - Python 3.6+
 - Administrator/root privileges (recommended for full functionality)
+- Internet connection for package installation
 
-### 1. Install Dependencies
+### Automated Setup (Recommended)
+
+#### For Windows:
+```bash
+# Run the setup script
+setup.bat
+```
+
+#### For Linux/macOS:
+```bash
+# Make the script executable and run
+chmod +x setup.sh
+./setup.sh
+```
+
+### Manual Setup
+
+#### 1. Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Start the Backend Server
+#### 2. Start the Backend Server
+Open a terminal/command prompt and run:
 ```bash
 python flask_backend_sqlite.py
 ```
-Server will start on `http://localhost:8000`
+**✅ Success indicators:**
+- You should see: `* Running on http://127.0.0.1:8000`
+- Keep this terminal open - the server needs to stay running
 
-### 3. Start the Frontend Dashboard
+#### 3. Start the Frontend Dashboard
+Open a **new** terminal/command prompt and run:
 ```bash
 cd frontend
 python serve.py
 ```
-Dashboard will open at `http://localhost:3000`
+**✅ Success indicators:**
+- Dashboard opens automatically in your browser at `http://localhost:3000`
+- You should see the System Health Dashboard interface
 
-### 4. Run System Utility
+#### 4. Run System Utility (Optional - for live data)
+Open a **third** terminal/command prompt and run:
 ```bash
-# For full functionality, run as administrator/root
+# Windows (run as Administrator for full functionality)
+python main.py
+
+# Linux/macOS (run with sudo for full functionality)
+sudo python main.py
+```
+**✅ Success indicators:**
+- You should see: `System Utility Daemon starting...`
+- Data will automatically appear in the dashboard within 30 minutes
+- Or check the dashboard immediately - test data should already be visible
+
+### ⚡ Quick Test
+
+1. **Verify Backend**: Visit `http://localhost:8000/machines` in your browser
+   - Should show JSON data (may be empty initially)
+
+2. **Verify Frontend**: Visit `http://localhost:3000`
+   - Should show the dashboard interface
+   - May show test data or empty state initially
+
+3. **Add Test Data** (if dashboard is empty):
+   ```bash
+   python test_backend.py
+   ```
+
+## � Detailed Running Instructions
+
+### 🖥️ Running the Complete System
+
+#### Step 1: Prepare Your Environment
+```bash
+# Clone the repository (if not already done)
+git clone https://github.com/AbhayNB/solsphere-system-utility-assignment.git
+cd solsphere-system-utility-assignment
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+#### Step 2: Start Backend Server (Terminal 1)
+```bash
+# Navigate to project directory
+cd "path/to/assignment 2"
+
+# Start the Flask backend
+python flask_backend_sqlite.py
+```
+**Expected Output:**
+```
+* Serving Flask app 'flask_backend_sqlite'
+* Debug mode: on
+* Running on all addresses (0.0.0.0)
+* Running on http://127.0.0.1:8000
+* Press CTRL+C to quit
+```
+
+#### Step 3: Start Frontend Dashboard (Terminal 2)
+```bash
+# Open a NEW terminal and navigate to frontend
+cd "path/to/assignment 2/frontend"
+
+# Start the frontend server
+python serve.py
+```
+**Expected Output:**
+```
+🚀 Frontend server starting on http://localhost:3000
+📁 Serving files from: frontend
+🔗 Opening dashboard in your default browser...
+```
+
+#### Step 4: Run System Utility (Terminal 3 - Optional)
+```bash
+# Open a NEW terminal (run as Administrator/sudo for full features)
+
+# Windows (as Administrator)
+python main.py
+
+# Linux/macOS (with sudo)
+sudo python main.py
+```
+**Expected Output:**
+```
+System Utility Daemon starting...
+WARNING: For full functionality, run as Administrator (if not already)
+```
+
+### 🌐 Accessing the System
+
+1. **Admin Dashboard**: http://localhost:3000
+   - Main interface for viewing machine data
+   - Real-time updates every 30 seconds
+   - Filtering, search, and export features
+
+2. **Backend API**: http://localhost:8000
+   - REST API endpoints
+   - Visit http://localhost:8000/machines to see raw data
+
+### 🔧 Troubleshooting
+
+#### Backend Won't Start
+```bash
+# Check if port 8000 is in use
+netstat -an | findstr 8000  # Windows
+lsof -i :8000              # Linux/macOS
+
+# Kill process if needed, then restart
+```
+
+#### Frontend Can't Connect to Backend
+```bash
+# Verify backend is running
+curl http://localhost:8000/machines
+# or visit in browser: http://localhost:8000/machines
+
+# Check for CORS errors in browser console
+# Ensure flask-cors is installed: pip install flask-cors
+```
+
+#### No Data in Dashboard
+```bash
+# Add test data manually
+python test_backend.py
+
+# Or run the system utility to collect real data
 python main.py
 ```
 
-## 📊 Usage
+#### Permission Issues (Windows)
+```bash
+# Run Command Prompt as Administrator
+# Right-click cmd.exe -> "Run as administrator"
+# Then run: python main.py
+```
 
-### For Administrators
-1. **Start the backend** to collect machine data
-2. **Open the dashboard** to view system status
-3. **Deploy the utility** on machines you want to monitor
-4. **Use filters** to identify machines with issues
-5. **Export data** for reporting or analysis
+#### Permission Issues (Linux/macOS)
+```bash
+# Run with sudo for system-level checks
+sudo python main.py
 
-### For System Monitoring
+# For BitLocker equivalent checks on Linux
+sudo python main.py
+```
+
+## 📊 Usage Guide
+
+### 🎯 For System Administrators
+
+#### 1. **Initial Setup**
+```bash
+# Start all components in order:
+# Terminal 1: Backend
+python flask_backend_sqlite.py
+
+# Terminal 2: Frontend  
+cd frontend && python serve.py
+
+# Terminal 3: System Utility (optional for live data)
+python main.py
+```
+
+#### 2. **Monitoring Dashboard**
+- **Access**: Open http://localhost:3000 in your browser
+- **Real-time Updates**: Data refreshes automatically every 30 seconds
+- **Manual Refresh**: Click the "Refresh" button anytime
+
+#### 3. **Using Dashboard Features**
+- **View Machines**: See all reporting machines in table or card view
+- **Filter Data**: Use dropdowns to filter by OS or specific issues
+- **Search**: Type machine ID in search box for quick lookup
+- **Export Data**: Click Export → JSON/CSV for reports
+- **Machine Details**: Click "Details" button for comprehensive info
+
+#### 4. **Deploy on Multiple Machines**
+```bash
+# Copy these files to each target machine:
+# - main.py
+# - requirements.txt
+
+# On each machine, run:
+pip install -r requirements.txt
+python main.py
+
+# All machines will report to the central dashboard
+```
+
+### 🔍 For System Monitoring
+
+#### Automated Monitoring
 The utility automatically:
-- Checks system health every 30 minutes
-- Reports only when changes are detected
-- Maintains persistent machine identification
-- Handles network connectivity issues gracefully
+- **Checks system health** every 30 minutes (configurable)
+- **Reports only changes** to minimize network traffic
+- **Maintains persistent machine ID** for consistent tracking
+- **Handles network issues** gracefully with retry logic
+
+#### Manual Monitoring
+```bash
+# Check specific machine status
+curl http://localhost:8000/machine/{machine-id}
+
+# Get all machines with issues
+curl "http://localhost:8000/machines?issue=unencrypted_disk"
+
+# Export current data
+curl http://localhost:8000/export/json > machines.json
+```
+
+### 📈 Understanding the Data
+
+#### Health Check Results
+- **✅ Green (Pass)**: Security/configuration check passed
+- **❌ Red (Fail)**: Issue detected, requires attention  
+- **❓ Yellow (Unknown)**: Unable to determine status
+
+#### Common Issues
+- **Unencrypted Disk**: BitLocker/FileVault/LUKS not enabled
+- **Outdated OS**: System updates available
+- **No Antivirus**: No antivirus software detected
+- **Sleep Non-compliant**: Sleep timeout > 10 minutes
+
+#### Status Categories
+- **🟢 Healthy**: All checks passed
+- **🟡 Warning**: Some checks unknown/pending
+- **🔴 Critical**: One or more checks failed
 
 ## 🔧 Configuration
 
